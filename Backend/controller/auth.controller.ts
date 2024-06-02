@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 import { RequestHandler } from "express";
 import jwt from "jsonwebtoken";
+import express from "express";
 require("dotenv").config();
 
 const JwtSecretKey = process.env.JWT_SECRET_KEY;
@@ -23,12 +24,27 @@ interface SignupRequestBody {
 }
 
 export const Signup: RequestHandler<{}, {}, SignupRequestBody> = async (
-  req,
-  res
+  req: express.Request,
+  res: express.Response
 ) => {
   try {
     let { username, email, password } = req.body;
     let hashedPassword = await bcrypt.hash(password, 10);
+    let checkEmail = await prisma.user.findUnique({ where: { email } });
+    let checkUsername = await prisma.user.findUnique({ where: { username } });
+
+    if (checkUsername && checkEmail) {
+      return res.status(400).json({ message: "Username and email are in use" });
+    }
+
+    if (checkUsername) {
+      return res.status(400).json({ message: "Username not available" });
+    }
+
+    if (checkEmail) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
     let register = await prisma.user.create({
       data: {
         username,
@@ -37,24 +53,14 @@ export const Signup: RequestHandler<{}, {}, SignupRequestBody> = async (
       },
     });
     res.status(200).json(register);
-
-    // let checkEmail = await prisma.user.findUnique({ where: { email } });
-    // if (checkEmail) {
-    //   return res.status(400).json({ message: "Email already exists" });
-    // }
-
-    // let checkUsername = await prisma.user.findUnique({ where: { username } });
-    // if (checkUsername) {
-    //   return res.status(400).json({ message: "Username not available" });
-    // }
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
 export const Login: RequestHandler<{}, {}, LoginRequetBody> = async (
-  req,
-  res
+  req: express.Request,
+  res: express.Response
 ) => {
   try {
     let { email, password } = req.body;
@@ -72,14 +78,22 @@ export const Login: RequestHandler<{}, {}, LoginRequetBody> = async (
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    const token = jwt.sign(
+    const refreshToken = jwt.sign(
       { userId: user.id, email: user.email },
       JwtSecretKey,
       {
         expiresIn: "2h",
       }
     );
-    res.json({ message: "Logged in", token });
+
+    // res.cookie("token", refreshToken, {
+    //   httpOnly: true,
+    //   secure: process.env.NODE_ENV === "production",
+    //   sameSite: "strict",
+    //   maxAge: 2 * 60 * 60 * 1000,
+    // });
+
+    res.status(200).json({ message: "Logged in", refreshToken });
   } catch (error) {
     res.status(401).json({ message: "Internal server error" });
   }

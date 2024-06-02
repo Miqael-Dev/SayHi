@@ -7,6 +7,7 @@ import { Prisma } from "@prisma/client";
 import bcrypt from "bcrypt";
 
 const authRouter = require("../routes/auth.route.ts");
+const chatRouter = require("../routes/chats.ts");
 const app = express();
 const PORT = process.env.PORT;
 
@@ -14,6 +15,7 @@ const PORT = process.env.PORT;
 app.use(cors());
 app.use(express.json());
 app.use("/", authRouter);
+app.use("/", chatRouter);
 
 app.listen(PORT, () => {
   console.log("Server running at port: http://localhost:" + PORT);
