@@ -86,15 +86,20 @@ export const Login: RequestHandler<{}, {}, LoginRequetBody> = async (
       }
     );
 
-    // res.cookie("token", refreshToken, {
-    //   httpOnly: true,
-    //   secure: process.env.NODE_ENV === "production",
-    //   sameSite: "strict",
-    //   maxAge: 2 * 60 * 60 * 1000,
-    // });
+    res.cookie("token", refreshToken, {
+      httpOnly: true,
+      // secure: process.env.NODE_ENV === "production",
+      // sameSite: "strict",
+      // maxAge: 2 * 60 * 60 * 1000,
+    });
 
     res.status(200).json({ message: "Logged in", refreshToken });
   } catch (error) {
     res.status(401).json({ message: "Internal server error" });
   }
+};
+
+export const Logout = (req: express.Request, res: express.Response) => {
+  res.clearCookie("token");
+  return res.status(200).json({ message: "Logged out successfully" });
 };

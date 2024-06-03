@@ -1,8 +1,8 @@
 import express from "express";
 import { authenticationJWT } from "../middleware/authentication";
-import { getChats } from "../controller/chats.controller";
+import { chatRoom } from "../controller/chats.controller";
 const router = express.Router();
 
-router.get("/chats", getChats);
+router.get("/", authenticationJWT, chatRoom);
 
 module.exports = router;
