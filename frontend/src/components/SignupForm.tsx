@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
+import { redirect } from "next/navigation";
 
 export const SignupForm = () => {
   let {
@@ -20,8 +21,35 @@ export const SignupForm = () => {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof SignupSchema>) => {
-    console.log(data);
+  const onSubmit = async (data: z.infer<typeof SignupSchema>) => {
+    let userData = {
+      username: data.username,
+      email: data.email,
+      password: data.password,
+    };
+
+    console.log(userData);
+    await fetch("http://localhost:3004/signup", {
+      method: "POST",
+      body: JSON.stringify(userData),
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        if (data) {
+          console.log(data);
+        }
+      })
+      .catch((err) => {
+        console.error("Signup error", err);
+      });
   };
   console.log(errors.username);
   return (
