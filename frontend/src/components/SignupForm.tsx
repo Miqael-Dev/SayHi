@@ -5,8 +5,10 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export const SignupForm = () => {
+  const router = useRouter();
   let {
     register,
     formState: { errors },
@@ -44,7 +46,7 @@ export const SignupForm = () => {
       })
       .then((data) => {
         if (data) {
-          console.log(data);
+          return router.push("/");
         }
       })
       .catch((err) => {
