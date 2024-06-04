@@ -4,8 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { LoginSchema } from "@/app/schemas/login";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export function LoginForm() {
+  const router = useRouter();
   let {
     register,
     handleSubmit,
@@ -17,8 +19,28 @@ export function LoginForm() {
       password: "",
     },
   });
-  const onSubmit = (data: z.infer<typeof LoginSchema>) => {
+  const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
     console.log(data);
+    await fetch("http://localhost:3004/login", {
+      method: "POST",
+      body: JSON.stringify(data),
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        }
+      })
+      .then((data) => {
+        console.log(data);
+        return router.push("/");
+      })
+      .catch((err) => {
+        console.error("Sign in failed", err);
+      });
   };
   return (
     <div className="w-full">

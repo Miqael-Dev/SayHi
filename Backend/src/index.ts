@@ -3,9 +3,6 @@ require("dotenv").config();
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { PrismaClient } from "@prisma/client";
-import { Prisma } from "@prisma/client";
-import bcrypt from "bcrypt";
 
 const authRouter = require("../routes/auth.route.ts");
 const chatRouter = require("../routes/chats.route.ts");
