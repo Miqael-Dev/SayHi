@@ -5,9 +5,11 @@ import * as z from "zod";
 import { LoginSchema } from "@/app/schemas/login";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export function LoginForm() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
   let {
     register,
     handleSubmit,
@@ -20,27 +22,23 @@ export function LoginForm() {
     },
   });
   const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
+    setIsLoading(false);
     console.log(data);
-    await fetch("http://localhost:3004/login", {
+    const res = await fetch("http://localhost:3004/login", {
       method: "POST",
       body: JSON.stringify(data),
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-      })
-      .then((data) => {
-        console.log(data);
-        return router.push("/");
-      })
-      .catch((err) => {
-        console.error("Sign in failed", err);
-      });
+    });
+    if (res.ok) {
+      return router.push("/");
+    } else if (!res.ok) {
+      let respnse = await res.json();
+      setIsLoading(true);
+      console.log(respnse);
+    }
   };
   return (
     <div className="w-full">
@@ -73,10 +71,20 @@ export function LoginForm() {
           <p className="text-sm text-red-500">{errors.password.message}</p>
         )}
         <button
-          className="w-full py-2 px-2 rounded-md bg-sky-500 text-white text-center mt-5"
+          className="w-full flex justify-center items-center py-2 px-2 rounded-md bg-sky-500 text-white text-center mt-5"
           type="submit"
         >
-          Login
+          {isLoading ? (
+            <p>Sign up</p>
+          ) : (
+            <Image
+              className="animate-spin"
+              src={"/loading.png"}
+              width={20}
+              height={20}
+              alt=""
+            />
+          )}
         </button>
         <div className=" my-3 flex w-full items-center">
           <div className=" bg-slate-300 w-full h-px"></div>

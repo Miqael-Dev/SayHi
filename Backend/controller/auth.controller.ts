@@ -89,7 +89,7 @@ export const Login: RequestHandler<{}, {}, LoginRequetBody> = async (
     res.cookie("token", refreshToken, {
       httpOnly: true,
       // secure: process.env.NODE_ENV === "production",
-      // sameSite: "strict",
+      sameSite: "strict",
       // maxAge: 2 * 60 * 60 * 1000,
     });
 
