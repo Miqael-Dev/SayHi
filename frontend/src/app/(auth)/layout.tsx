@@ -22,7 +22,7 @@ export default function AuthLayout({
             </div>
             <div>
               <Image
-                className="w-auto h-auto"
+                className="w-9 h-9"
                 priority={true}
                 src="/logo-black.svg"
                 width={36}
@@ -32,7 +32,7 @@ export default function AuthLayout({
             </div>
           </div>
           <Image
-            className="mt-5 w-auto h-auto"
+            className="mt-5 w-[400px] h-[400px]"
             priority={true}
             src="/online-worlds.png"
             width={400}

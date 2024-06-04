@@ -6,8 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export const SignupForm = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   let {
     register,
@@ -24,6 +26,7 @@ export const SignupForm = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof SignupSchema>) => {
+    setIsLoading(false);
     let userData = {
       username: data.username,
       email: data.email,
@@ -46,10 +49,12 @@ export const SignupForm = () => {
       })
       .then((data) => {
         if (data) {
-          return router.push("/");
+          setIsLoading(true);
+          return router.push("/login");
         }
       })
       .catch((err) => {
+        setIsLoading(true);
         console.error("Signup error", err);
       });
   };
@@ -120,8 +125,18 @@ export const SignupForm = () => {
               )}
             </div>
           </div>
-          <button className=" cursor-pointer w-full py-2 px-2 rounded-md bg-sky-500 text-white text-center mt-5">
-            <p>Sign up</p>
+          <button className=" flex items-center justify-center cursor-pointer w-full py-2 px-2 rounded-md bg-sky-500 text-white text-center mt-5">
+            {isLoading ? (
+              <p>Sign up</p>
+            ) : (
+              <Image
+                className="animate-spin"
+                src={"/loading.png"}
+                width={20}
+                height={20}
+                alt=""
+              />
+            )}
           </button>
           <div className=" my-3 flex w-full items-center">
             <div className=" bg-slate-300 w-full h-px"></div>
