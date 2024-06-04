@@ -37,32 +37,34 @@ export default function AuthLayout({
             alt="phone icon"
           />
         </div>
-        <div className="flex flex-col w-1/2">
-          <div className="flex w-full justify-center mt-5 mb-5">
-            <Link href="./login" className="w-1/2">
-              <div
-                className={
-                  pathname.startsWith("/login")
-                    ? " text-slate-600 text-center h-fit w-full pt-1 pb-1 bg-blue-100 font-medium border-2 border-cyan-400 transition-colors rounded-l-md"
-                    : " text-slate-400 rounded-l-md transition-colors h-fit w-full  flex pt-1 pb-1 justify-center items-center border-2 border-cyan-400 bg-transparent font-normal"
-                }
-              >
-                <p>Login</p>
-              </div>
-            </Link>
-            <Link href="./signup" className="w-1/2">
-              <div
-                className={
-                  pathname.startsWith("/signup")
-                    ? " text-slate-600 text-center h-fit w-full pt-1 pb-1 bg-blue-100 font-medium border-2 border-cyan-400 transition-colors rounded-r-md"
-                    : " text-slate-400 rounded-r-md transition-colors h-fit  w-full flex pt-1 pb-1 justify-center items-center border-2 border-cyan-400 bg-transparent font-normal"
-                }
-              >
-                <p>Sign up</p>
-              </div>
-            </Link>
+        <div className="flex flex-col w-1/2 items-center justify-center">
+          <div className="w-3/5">
+            <div className="flex w-full justify-center mt-5 mb-5">
+              <Link href="./login" className="w-1/2">
+                <div
+                  className={
+                    pathname.startsWith("/login")
+                      ? " text-slate-600 text-center h-fit w-full pt-1 pb-1 bg-blue-100 font-medium border-2 border-cyan-400 transition-colors rounded-l-md"
+                      : " text-slate-400 rounded-l-md transition-colors h-fit w-full  flex pt-1 pb-1 justify-center items-center border-2 border-cyan-400 bg-transparent font-normal"
+                  }
+                >
+                  <p>Login</p>
+                </div>
+              </Link>
+              <Link href="./signup" className="w-1/2">
+                <div
+                  className={
+                    pathname.startsWith("/signup")
+                      ? " text-slate-600 text-center h-fit w-full pt-1 pb-1 bg-blue-100 font-medium border-2 border-cyan-400 transition-colors rounded-r-md"
+                      : " text-slate-400 rounded-r-md transition-colors h-fit  w-full flex pt-1 pb-1 justify-center items-center border-2 border-cyan-400 bg-transparent font-normal"
+                  }
+                >
+                  <p>Sign up</p>
+                </div>
+              </Link>
+            </div>
+            {children}
           </div>
-          {children}
         </div>
       </div>
     </>
