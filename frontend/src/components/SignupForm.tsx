@@ -7,6 +7,7 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 export const SignupForm = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -59,6 +60,7 @@ export const SignupForm = () => {
       });
   };
   console.log(errors.username);
+
   return (
     <>
       <div className="w-full">
@@ -143,11 +145,17 @@ export const SignupForm = () => {
             <p className=" px-1">Or</p>
             <div className=" bg-slate-300 w-full h-px"></div>
           </div>
-          <div className=" cursor-pointer hover:bg-slate-50 w-full border-2 rounded-md py-2 flex justify-center items-center">
+          <div
+            onClick={() => signIn("google")}
+            className=" cursor-pointer hover:bg-slate-50 w-full border-2 rounded-md py-2 flex justify-center items-center"
+          >
             <Image src="/Google.png" alt="google icon" width={30} height={30} />
             <p className=" text-sm ml-2">Sign up with Google</p>
           </div>
-          <div className=" cursor-pointer hover:bg-slate-50 w-full mt-3 border-2 rounded-md py-2 flex justify-center items-center">
+          <div
+            onClick={() => signIn("facebook")}
+            className=" cursor-pointer hover:bg-slate-50 w-full mt-3 border-2 rounded-md py-2 flex justify-center items-center"
+          >
             <Image
               src="/Facebook.png"
               alt="google icon"
